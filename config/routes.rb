@@ -1,5 +1,7 @@
 Website::Application.routes.draw do
 
+  match "demo/quicktime" => "demo#quicktime"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
