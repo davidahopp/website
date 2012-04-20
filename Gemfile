@@ -13,7 +13,6 @@ gem 'haml', :git => 'https://github.com/infbio/haml.git', :branch => 'form_for_f
 gem 'ejs'
 #gem 'resque-scheduler'
 
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -32,6 +31,10 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl'
   gem 'simplecov'
+end
+
+group :development do
+  gem 'capistrano'
 end
 
 # To use ActiveModel has_secure_password
