@@ -53,8 +53,8 @@ namespace :assets do
     run "cd #{current_path} && bundle exec rake assets:clean"
   end
   task :cleanup do
-    assets.clean
-    assets.precompile
+    #assets.clean
+    #assets.precompile
   end
 end
 
@@ -65,15 +65,17 @@ namespace :db do
   end
 
   task :migrate do
-    run "cd #{current_path} && bundle exec rake RAILS_ENV=production  db:migrate"
+    run "cd #{current_path} && bundle exec rake RAILS_ENV=production db:migrate"
   end
 
   task :rollback do
-    run "cd #{current_path} && bundle exec rake RAILS_ENV=production  db:rollback"
+    if previous_release
+      run "cd #{previouse_release} && bundle exec rake RAILS_ENV=production db:migrate VERSION='cat migration_version.txt'"
+    end
   end
 
   task :set_version do
-    run "rake db:current_version > migration_version.txt"
+    run "cd #{release_path} && bundle exec rake RAILS_ENV=production db:current_version > migration_version.txt"
   end
 
   #
@@ -95,10 +97,11 @@ end
 
 after "deploy:update", "db:setup"
 after "db:setup", "db:migrate"
+after "db:migrate", "db:set_version"
 after "deploy:restart", "deploy:cleanup"
 before "deploy:restart", "assets:cleanup"
 
-
+before "deploy:rollback", "db:rollback"
 after "deploy:rollback:revision", "bundle:install"
 after "deploy:update_code", "bundle:install"
 
