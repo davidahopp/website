@@ -8,7 +8,10 @@ gem 'rails', '3.2.1'
 gem 'mysql2'
 gem 'execjs'
 gem 'therubyracer'
-gem 'haml'
+gem 'haml_assets'
+gem 'haml', :git => 'https://github.com/infbio/haml.git', :branch => 'form_for_fix'
+gem 'ejs'
+gem 'resque-scheduler'
 
 
 # Gems used only for assets and not required
@@ -27,6 +30,8 @@ gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'factory_girl'
+  gem 'simplecov'
 end
 
 # To use ActiveModel has_secure_password

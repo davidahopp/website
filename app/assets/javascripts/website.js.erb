@@ -1,0 +1,8 @@
+window.website || (window.website = {models :{}, views:{}, collections:{}, routers: {}})
+
+website.doTest = function(){
+  var v = new website.views.Test()
+  console.log(v.render().el)
+  $('body').append(v.render().el)
+}
+
