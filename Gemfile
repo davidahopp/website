@@ -11,7 +11,7 @@ gem 'therubyracer'
 gem 'haml_assets'
 gem 'haml', :git => 'https://github.com/infbio/haml.git', :branch => 'form_for_fix'
 gem 'ejs'
-gem 'resque-scheduler'
+#gem 'resque-scheduler'
 
 
 # Gems used only for assets and not required
