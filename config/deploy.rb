@@ -72,6 +72,25 @@ namespace :db do
     run "cd #{current_path} && bundle exec rake RAILS_ENV=production  db:rollback"
   end
 
+  task :set_version do
+    run "rake db:current_version > migration_version.txt"
+  end
+
+  #
+  #before :deploy do
+  #  # Get the topmost migration that has been run:
+  #  run "rake db:current_version > migration_version.txt"
+  #end
+  #
+  #after 'deploy:rollback' do
+  #  run "rake db:migrate VERSION=`cat migration_version.txt`"
+  #end
+  #
+  #after :deploy do
+  #  # Clean up now that we don't need it....
+  #  run "unlink migration_version.txt"
+  #end
+
 end
 
 after "deploy:update", "db:setup"
