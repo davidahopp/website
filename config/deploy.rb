@@ -53,8 +53,8 @@ namespace :assets do
     run "cd #{current_path} && bundle exec rake assets:clean"
   end
   task :cleanup do
-    #assets.clean
-    #assets.precompile
+    assets.clean
+    assets.precompile
   end
 end
 
