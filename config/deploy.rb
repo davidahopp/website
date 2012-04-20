@@ -70,7 +70,7 @@ namespace :db do
 
   task :rollback do
     if previous_release
-      run "cd #{previouse_release} && bundle exec rake RAILS_ENV=production db:migrate VERSION='cat migration_version.txt'"
+      run "cd #{current_path} && bundle exec rake RAILS_ENV=production db:migrate VERSION=`cat #{previous_release}/migration_version.txt`"
     end
   end
 
