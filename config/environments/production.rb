@@ -15,7 +15,7 @@ Website::Application.configure do
   config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Generate digests for assets URLs
   config.assets.digest = true
@@ -38,7 +38,7 @@ Website::Application.configure do
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-  config.logger = Logger.new("~/www/website/log/production.log")
+  config.logger = Logger.new("/home/ubuntu/www/website/log/production.log")
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
