@@ -5,11 +5,11 @@ gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'pg'
 gem 'execjs'
 gem 'therubyracer'
 gem 'haml_assets'
-gem 'haml', :git => 'https://github.com/infbio/haml.git', :branch => 'form_for_fix'
+gem 'haml'
 gem 'ejs'
 #gem 'resque-scheduler'
 
