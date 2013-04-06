@@ -10,6 +10,7 @@ gem 'execjs'
 gem 'therubyracer'
 gem 'haml_assets'
 gem 'haml'
+gem 'rvm-capistrano'
 gem 'ejs'
 #gem 'resque-scheduler'
 

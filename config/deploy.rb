@@ -7,7 +7,7 @@ ssh_options[:forward_agent] = true
 set :keep_releases, 3
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
-set :deploy_to, "/home/ubuntu/www/apps"
+set :deploy_to, "/srv/app/#{application}"
 
 #role :web, "davidahopp.com"                          # Your HTTP server, Apache/etc
 #role :app, "davidahopp.com"                          # This may be the same as your `Web` server
@@ -16,10 +16,8 @@ set :deploy_to, "/home/ubuntu/www/apps"
 server "davidahopp.com", :app, :web, :db, :primary => true
 
 set :user, 'ubuntu'
-ssh_options[:keys] = ["/home/david/.ssh/dahkey.pem"]
+ssh_options[:keys] = ["~/.ssh/dahkey.pem"]
 
-# Add RVM's lib directory to the load path.
-$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
 
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
