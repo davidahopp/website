@@ -19,5 +19,15 @@ module Website
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    config.generators do |g|
+      g.stylesheets false
+      g.helper false
+      g.assets false
+    end
+
+    config.assets.precompile += %w( preview.css )
+    config.assets.precompile += %w( preview.js )
+
   end
 end
