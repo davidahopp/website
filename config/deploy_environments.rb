@@ -32,10 +32,7 @@ namespace :production_app do
     cluster.setup
     set :rails_env, 'production'
     set :user, 'sitedeploy'
-    ssh_options[:keys] = ['~/.ssh/davidahopp_sitedeploy']
     server 'davidahopp.com', :app, :web, :db, :primary => true
-
-
   end
 end
 
