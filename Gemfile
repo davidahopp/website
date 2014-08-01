@@ -13,6 +13,7 @@ gem 'capistrano'
 gem 'rvm-capistrano'
 gem 'ejs'
 #gem 'resque-scheduler'
+gem 'foundation-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
