@@ -26,8 +26,8 @@ module Website
       g.assets false
     end
 
-    config.assets.precompile += %w( preview.css )
-    config.assets.precompile += %w( preview.js )
+    config.assets.precompile += %w( home.css )
+    config.assets.precompile += %w( home.js )
 
   end
 end

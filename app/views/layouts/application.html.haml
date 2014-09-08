@@ -10,4 +10,7 @@
     = csrf_meta_tags
     = yield(:head)
   %body
-    = yield
+    = render partial: 'home/top_bar'
+    .row{data: {equalizer: ''}}
+      .large-12.columns
+        = yield

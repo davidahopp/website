@@ -12,8 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require foundation
 //= require ./underscore
 //= require ./backbone
 //= require website
 //= require_tree ./views
 //= require_tree ../templates
+
+$(function(){ $(document).foundation(); });
