@@ -1,3 +1,14 @@
 body{
   background-color: #fff;
+
+  .home-page-image{
+    height: 600px;
+    width: 600px;
+    background: image_url('toby_pose.jpg') no-repeat;
+    background-size: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+  }
+
 }
