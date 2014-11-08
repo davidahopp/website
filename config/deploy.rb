@@ -1,95 +1,76 @@
-require "rvm/capistrano"
-require "bundler/capistrano"
+require 'mina/bundler'
+require 'mina/rails'
+require 'mina/git'
+require 'mina/config'
 
-namespace :production do
-  task :setup do
-    production_app.setup
-    setup_app
-  end
+set :term_mode, :system
+set :forward_agent, true
+set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
-  task :check do
-    production_app.setup
-    check_app
-  end
+# This task is the environment that is loaded for most commands, such as
+# `mina deploy` or `mina rake`.
+task :environment do
+  # If you're using rbenv, use this to load the rbenv environment.
+  # Be sure to commit your .rbenv-version to your repository.
+  # invoke :'rbenv:load'
 
-  task :deploy do
-    production_app.setup
-    deploy_app
-  end
+  # For those using RVM, use this to load an RVM version@gemset.
+  # invoke :'rvm:use[ruby-1.9.3-p125@default]'
+end
+
+# Put any custom mkdir's in here for when `mina setup` is ran.
+# For Rails apps, we'll make some of the shared paths that are shared between
+# all releases.
+task :setup => :environment do
+  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/log"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/log"]
+
+  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config"]
+
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
+  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml'."]
+
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
+  queue  %[echo "-----> Be sure to edit 'shared/config/secrets.yml'."]
+
+  # queue! %[touch "#{deploy_to}/#{shared_path}/config/app_config.yml"]
+  # queue  %[echo "-----> Be sure to edit 'shared/config/app_config.yml'."]
 
 end
 
+desc "Deploys the current version to the server."
+task :deploy => :environment do
+  deploy do
+    # Put things that will set up an empty directory into a fully set-up
+    # instance of your project.
+    invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
+    invoke :'bundle:install'
+    invoke :'rails:db_migrate'
+    invoke :'rails:assets_precompile'
+    invoke :'deploy:cleanup'
 
-task :deploy_app do
-  deploy.default
-end
-
-task :setup_app do
-  deploy.setup
-end
-
-task :check_app do
-  deploy.check
-end
-
-namespace :deploy do
-  #task :start do ; end
-  #task :stop do ; end
-
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{File.join(current_path,'tmp','restart.txt')}"
-  end
-end
-
-namespace :assets do
-  task :precompile do
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec rake assets:precompile"
-  end
-  task :clean do
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec rake assets:clean"
-  end
-  task :cleanup do
-    assets.clean
-    assets.precompile
-  end
-end
-
-namespace :db do
-  task :setup do
-    run "ln -sf #{shared_path}/database.yml #{current_path}/config/"
-  end
-
-  task :migrate do
-    run "cd #{current_path} && bundle exec rake RAILS_ENV=#{rails_env} db:migrate"
-  end
-
-  task :seed do
-    run "cd #{current_path} && bundle exec rake RAILS_ENV=#{rails_env} db:seed"
-  end
-
-  task :rollback do
-    if previous_release
-      run "cd #{current_path} && bundle exec rake RAILS_ENV=#{rails_env} db:migrate VERSION=`cat #{previous_release}/migration_version.txt`"
+    to :launch do
+      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
+      queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
     end
   end
-
-  task :set_version do
-    run "cd #{release_path} && bundle exec rake RAILS_ENV=#{rails_env} db:current_version > migration_version.txt"
-  end
-
-  task :migrate_to_zero do
-    # should dump all the tables
-    run "cd #{current_path} && bundle exec rake RAILS_ENV=#{rails_env} db:migrate VERSION=0"
-  end
 end
 
-after "deploy:update", "db:setup"
-after "db:setup", "db:migrate"
-after "db:migrate", "db:seed"
-after "db:migrate", "db:set_version"
-after "deploy:restart", "deploy:cleanup"
-before "deploy:restart", "assets:cleanup"
+desc "Seed data to the database"
+task :seed => :environment do
+  puts "-----> Seeding Database"
+  queue "cd #{release_path}/"
+  queue "RAILS_ENV=#{rails_env} bundle exec rake db:seed"
+  puts "-----> Seeding Completed."
+end
 
-before "deploy:rollback", "db:rollback"
-after "deploy:rollback:revision", "bundle:install"
-after "deploy:update_code", "bundle:install"
+
+# For help in making your deploy script, see the Mina documentation:
+#
+#  - http://nadarei.co/mina
+#  - http://nadarei.co/mina/tasks
+#  - http://nadarei.co/mina/settings
+#  - http://nadarei.co/mina/helpers
+
