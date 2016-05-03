@@ -2,10 +2,12 @@
 common: &common
       app: website
       repository: git@github.com:davidahopp/website.git
-      shared_paths: ['config/database.yml', 'log', 'config/secrets.yml]
-
+      shared_paths: ['config/database.yml', 'log', 'config/secrets.yml']
 production:
       <<: *common
-      domain: 104.236.23.58
+      domain: 107.170.101.157
       user: sitedeploy
       branch: production
+
+
+

@@ -7,6 +7,7 @@ set :term_mode, :system
 set :forward_agent, true
 set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
+
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
@@ -31,11 +32,11 @@ task :setup => :environment do
   queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml'."]
 
-  queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
-  queue  %[echo "-----> Be sure to edit 'shared/config/secrets.yml'."]
-
   # queue! %[touch "#{deploy_to}/#{shared_path}/config/app_config.yml"]
-  # queue  %[echo "-----> Be sure to edit 'shared/config/app_config.yml'."]
+  # queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/app_config.yml'."]
+
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
+  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/secrets.yml'."]
 
 end
 
@@ -50,6 +51,7 @@ task :deploy => :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
+    invoke :'seed'
 
     to :launch do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
@@ -65,7 +67,6 @@ task :seed => :environment do
   queue "RAILS_ENV=#{rails_env} bundle exec rake db:seed"
   puts "-----> Seeding Completed."
 end
-
 
 # For help in making your deploy script, see the Mina documentation:
 #
